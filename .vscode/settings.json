@@ -4,5 +4,11 @@
     "editor.formatOnSave": true,
     "python.formatting.provider": "autopep8",
     "editor.wordWrapColumn": 120,
-    "editor.wordWrap": "wordWrapColumn"
+    "editor.wordWrap": "wordWrapColumn",
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 120,
+    "diffEditor.codeLens": true
 }

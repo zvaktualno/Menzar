@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { Card, Accordion, Button } from "react-bootstrap";
 
@@ -16,11 +17,15 @@ const Order = (props) => {
     const accordionID = props.accordionID.toString();
 
     function deleteOrder(){
-        const apiURL = "http://127.0.0.1:8000/api/v1/order/remove/" + order.pk + "/";
-        fetch(apiURL).then(props.refreshParent);
+        const apiURL = "order/remove/";
+        const data = {
+            "order_pk": order.pk,
+        };
+        axios.delete(apiURL, { data: data }).then(setTimeout(() => {
+            props.refreshParent();
+        }, 1000 ));
     }
-
-
+    
     const ratingIcon = reviewAvailable ? (
         <div>
             <p>{review.comment}</p>

@@ -2,36 +2,36 @@ import React from "react";
 import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
-import { applyMiddleware, createStore } from "redux";
 import { routerMiddleware, ConnectedRouter } from "connected-react-router";
-
-import rootReducer from "./Reducer";
+import { configureStore } from "@reduxjs/toolkit";
+import createRootReducer from "./Reducer";
 import { setCurrentUser, setToken } from "./components/Login/LoginActions"; // new imports
 import { isEmpty } from "./utils/Utils"; // new imports
 
 const smth = ({ children, initialState = {} }) => {
-  const history = createBrowserHistory();
-  const middleware = [thunk, routerMiddleware(history)];
+    const history = createBrowserHistory();
+    const middleware = [thunk, routerMiddleware(history)];
 
-  const store = createStore(
-    rootReducer(history),
-    initialState,
-    applyMiddleware(...middleware)
-  );
+    const store = configureStore({
+        reducer: createRootReducer(history),
+        middleware: middleware,
+        preloadedState: initialState,
+    });
 
-  // check localStorage
-  if (!isEmpty(localStorage.getItem("token"))) {
-    store.dispatch(setToken(localStorage.getItem("token")));
-  }
-  if (!isEmpty(localStorage.getItem("user"))) {
-    const user = JSON.parse(localStorage.getItem("user"));
-    store.dispatch(setCurrentUser(user, ""));
-  }
+    // check localStorage
+    if (!isEmpty(localStorage.getItem("token"))) {
+        store.dispatch(setToken(localStorage.getItem("token")));
+    }
 
-  return (
-    <Provider store={store}>
-      <ConnectedRouter history={history}>{children}</ConnectedRouter>
-    </Provider>
-  );
+    if (!isEmpty(localStorage.getItem("user"))) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        store.dispatch(setCurrentUser(user, ""));
+    }
+
+    return (
+        <Provider store={store}>
+            <ConnectedRouter history={history}>{children}</ConnectedRouter>
+        </Provider>
+    );
 };
 export default smth;

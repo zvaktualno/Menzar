@@ -1,62 +1,62 @@
-import React, { Component } from "react";
-import {
-  Container,
-  Row,
-} from "react-bootstrap";
+import axios from "axios";
+import React, { Component, useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
 
 import Diner from "./Diner/Diner";
 
-class DinerListPage extends Component {
-    constructor(props) {
-        super(props);
-        this.apiUrl = 'http://127.0.0.1:8000/api/v1/diners/';
-        this.state = {
-            error: null,
-            isLoaded: false,
-            diners: []
-        };        
+const DinerListPage = (props) => {
+    const [state, setState] = useState({
+        error: null,
+        isLoaded: false,
+        diners: [],
+    });
+    function dinerSortByFavorite(a, b) {
+        if (a.favorite) {
+            return -1;
+        }
+        if (b.favorite) {
+            return 1;
+        }
+        return -1;
     }
-    
-    componentDidMount() {
-        fetch(this.apiUrl)
-        .then(response => response.json())
-        .then(
+
+    function renderDiners() {
+        axios.get("diners/").then(
             (result) => {
-                this.setState({
+                setState({
                     isLoaded: true,
-                    diners: result
+                    diners: result.data.sort(dinerSortByFavorite), // Sort diners by favorite
                 });
             },
             (error) => {
-                this.setState({
+                setState({
                     isLoaded: true,
-                    error
+                    error,
                 });
             }
         );
     }
-    
-    render()
-    {
-        const { error, isLoaded, diners } = this.state;
-        if (error) {
-            return <div>Error: {error.message}</div>;
-        }
-        else if (!isLoaded) {
-            return <div>Loading...</div>;
-        }
-        else {
-            return (
-                <Container>
-                    <Row>
-                        {diners.map((diner, index) => (
-                            <Diner key={index}  diner={diner} date={this.date} />
-                        ))}
-                    </Row>
-                </Container>
-            );
-        }
+
+    useEffect(() => {
+        renderDiners();
+    }, []);
+
+    const { error, isLoaded, diners } = state;
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+        return <div>Loading...</div>;
+    } else {
+        return (
+            <Container>
+                <Row>
+                    {diners.map((diner, index) => (
+                        <Diner key={index} displayFavorite={props.isAuthenticated} diner={diner} />
+                    ))}
+                </Row>
+            </Container>
+        );
     }
-}
+};
 
 export default DinerListPage;

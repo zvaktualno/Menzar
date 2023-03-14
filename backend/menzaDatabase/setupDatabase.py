@@ -16,10 +16,8 @@ def createDatabase():
     createDishes()
     print("Creating menus...")
     createMenus()
-    print("Creating orders...")
+    print("Creating orders and reviews...")
     createOrders()
-    # print("Creating reviews...")
-    # createReviews()
     return
 
 
@@ -740,8 +738,10 @@ def createUsers():
             obj = User.objects.get(username=name)
 
         except User.DoesNotExist:
-            obj = User(username=name)
-            obj.save()
+            user = User.objects.create(
+                username=name)
+            user.set_password("testpass123")
+            user.save()
 
 
 def createMenus():
@@ -753,9 +753,11 @@ def createMenus():
             d = Dish.objects.get(name=name)
 
             try:
-                obj = Menu.objects.get(soup=s, dish=d, diner=diner, date=dishGroup["datum"])
+                obj = Menu.objects.get(
+                    soup=s, dish=d, diner=diner, date=dishGroup["datum"])
             except Menu.DoesNotExist:
-                obj = Menu(soup=s, dish=d, diner=diner, date=dishGroup["datum"])
+                obj = Menu(soup=s, dish=d, diner=diner,
+                           date=dishGroup["datum"])
                 obj.save()
 
 
@@ -5127,7 +5129,6 @@ def createOrders():
             )
             orderObj.save()
 
-        # sorry for this weird naming
         if order["rating"] != 0 and order["comment"] != "None":
             try:
                 review = Review.objects.get(order=orderObj)
@@ -5138,6 +5139,7 @@ def createOrders():
 
 
 def deleteDatabase():
+    #User.objects.all().delete()
     Order.objects.all().delete()
     Menu.objects.all().delete()
     Dish.objects.all().delete()

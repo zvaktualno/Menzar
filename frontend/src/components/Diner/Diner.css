@@ -1,0 +1,68 @@
+.my-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.my-card:hover {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+}
+
+.card-img-top {
+  margin-left: -10%;
+  size: 100%;
+  object-fit: cover;
+  width: 120%;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.favorite-icon.empty {
+  color: black;
+}
+
+.favorite-icon.filled {
+  color: red;
+}
+
+.favorite-fab:hover .favorite-icon.empty{
+  color: red;
+  transform: scale(1.4);
+}
+
+.favorite-fab:hover .favorite-icon.filled{
+  transform: scale(1.4);
+}
+/*
+.favorite-button.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.favorite-button.btn-success:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+.favorite-button i.fas.fa-heart.filled {
+  color: #28a745;
+}
+
+.favorite-button i.fas.fa-heart {
+  margin-right: 10px;
+}
+*/
